@@ -1,0 +1,182 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Catálogo de Filmes e Séries</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-film"></i> Catálogo de Filmes e Séries</h1>
+            <div class="search-bar">
+                <div class="search-input-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="busca" placeholder="Buscar filme ou série...">
+                    <div class="search-suggestions" id="suggestions"></div>
+                </div>
+                <button id="buscar" class="btn-search">
+                    <i class="fas fa-search"></i> Buscar
+                    <span class="loading-spinner" id="buscarLoading" style="display: none;"></span>
+                </button>
+                <button id="verLista" class="btn-secondary">
+                    <i class="fas fa-list"></i> 
+                    <span id="contadorLista">Minha Lista</span>
+                    <span class="badge" id="badgeContador">0</span>
+                </button>
+            </div>
+            <div class="stats">
+                <span id="totalFilmes" class="stat-item">
+                    <i class="fas fa-film"></i> Filmes na lista: <strong>0</strong>
+                </span>
+                <span id="mediaNotas" class="stat-item">
+                    <i class="fas fa-star"></i> Média de notas: <strong>0.0</strong>
+                </span>
+                <span id="totalCategorias" class="stat-item">
+                    <i class="fas fa-tags"></i> Categorias: <strong>0</strong>
+                </span>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-tags"></i> Categorias</h2>
+                <button id="mostrarTodos" class="btn-category active">
+                    <i class="fas fa-layer-group"></i> Todos
+                    <span class="category-count">(0)</span>
+                </button>
+            </div>
+            <div class="categories-container">
+                <div class="categories-search">
+                    <input type="text" id="buscaCategoria" placeholder="Filtrar categorias...">
+                </div>
+                <ul id="categorias">
+                    <!-- Categorias serão geradas dinamicamente -->
+                </ul>
+            </div>
+            <div class="sidebar-footer">
+                <h3><i class="fas fa-chart-line"></i> Estatísticas Rápidas</h3>
+                <div class="quick-stats" id="quickStats">
+                    <div class="stat-card">
+                        <i class="fas fa-star-half-alt"></i>
+                        <div>
+                            <div class="stat-value">0.0</div>
+                            <div class="stat-label">Nota Média</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-thumbs-up"></i>
+                        <div>
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Acima de 8</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3><i class="fas fa-fire"></i> Gêneros Populares</h3>
+                <div class="genre-tags">
+                    <span class="genre-tag" data-genre="Ação">Ação</span>
+                    <span class="genre-tag" data-genre="Comédia">Comédia</span>
+                    <span class="genre-tag" data-genre="Drama">Drama</span>
+                    <span class="genre-tag" data-genre="Terror">Terror</span>
+                    <span class="genre-tag" data-genre="Romance">Romance</span>
+                    <span class="genre-tag" data-genre="Ficção Científica">Ficção Científica</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-header">
+                <div class="header-left">
+                    <h2 id="categoriaAtual">Todos os Filmes</h2>
+                    <div class="subtitle" id="contadorExibicao">Exibindo 0 de 0 filmes</div>
+                </div>
+                <div class="header-right">
+                    <div class="sort-options">
+                        <select id="ordenar">
+                            <option value="titulo"><i class="fas fa-sort-alpha-down"></i> Título</option>
+                            <option value="nota"><i class="fas fa-star"></i> Nota (maior)</option>
+                            <option value="recente"><i class="fas fa-calendar-plus"></i> Mais Recente</option>
+                            <option value="antigo"><i class="fas fa-calendar-minus"></i> Mais Antigo</option>
+                        </select>
+                    </div>
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="grid" title="Visualização em Grade">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list" title="Visualização em Lista">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-body">
+                <div id="lista" class="movie-grid">
+                    <!-- Lista de filmes será exibida aqui -->
+                </div>
+                
+                <div id="infoFilme" class="movie-details" style="display: none;">
+                    <!-- Detalhes do filme serão exibidos aqui -->
+                </div>
+                
+                <div id="buscaResultados" class="search-results" style="display: none;">
+                    <div class="results-header">
+                        <h3><i class="fas fa-search"></i> Resultados da Busca</h3>
+                        <span class="results-count" id="contadorResultados">0 resultados</span>
+                    </div>
+                    <div id="resultadosLista" class="results-grid"></div>
+                    <div class="results-actions">
+                        <button id="carregarMais" class="btn-secondary" style="display: none;">
+                            <i class="fas fa-plus"></i> Carregar Mais Resultados
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="loadingState" class="loading-state" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Carregando filmes...</p>
+                </div>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-film fa-4x"></i>
+                    <h3>Nenhum filme encontrado</h3>
+                    <p>Tente buscar por um filme ou adicionar filmes à sua lista!</p>
+                    <button id="buscarVazio" class="btn-search">
+                        <i class="fas fa-search"></i> Buscar Filmes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para edição -->
+    <div id="modalEdicao" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3><i class="fas fa-edit"></i> Editar Filme</h3>
+            <div id="modalConteudo"></div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmação -->
+    <div id="modalConfirmacao" class="modal" style="display: none;">
+        <div class="modal-content confirm-modal">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirmação</h3>
+            <p id="confirmMessage">Tem certeza que deseja realizar esta ação?</p>
+            <div class="modal-actions">
+                <button id="confirmCancel" class="btn-secondary">Cancelar</button>
+                <button id="confirmOk" class="btn-search">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

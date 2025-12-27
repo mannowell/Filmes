@@ -1,0 +1,198 @@
+<!-- lista.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Minha Lista de Filmes</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-list"></i> Minha Lista de Filmes</h1>
+            <div class="search-bar">
+                <button id="voltar" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar para Catálogo
+                </button>
+                <div class="action-buttons">
+                    <button id="exportar" class="btn-search">
+                        <i class="fas fa-download"></i> Exportar Lista
+                    </button>
+                    <button id="backup" class="btn-secondary" style="background: var(--accent-yellow); color: #333;">
+                        <i class="fas fa-save"></i> Backup
+                    </button>
+                    <button id="limpar" class="btn-danger">
+                        <i class="fas fa-trash"></i> Limpar Lista
+                    </button>
+                </div>
+            </div>
+            <div class="stats">
+                <span id="totalLista" class="stat-item">
+                    <i class="fas fa-film"></i> Total de Filmes: <strong>0</strong>
+                </span>
+                <span id="melhorFilme" class="stat-item">
+                    <i class="fas fa-crown"></i> Melhor Avaliado: <strong>-</strong>
+                </span>
+                <span id="piorFilme" class="stat-item">
+                    <i class="fas fa-thumbs-down"></i> Pior Avaliado: <strong>-</strong>
+                </span>
+                <span id="totalFavoritos" class="stat-item">
+                    <i class="fas fa-star"></i> Favoritos: <strong>0</strong>
+                </span>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-header">
+                <div class="header-left">
+                    <h2>Todos os Meus Filmes</h2>
+                    <div class="subtitle" id="contadorFiltrados">Exibindo 0 de 0 filmes</div>
+                </div>
+                <div class="header-right">
+                    <div class="sort-options">
+                        <select id="ordenarLista">
+                            <option value="titulo"><i class="fas fa-sort-alpha-down"></i> Título</option>
+                            <option value="nota"><i class="fas fa-star"></i> Nota (maior)</option>
+                            <option value="categoria"><i class="fas fa-tags"></i> Categoria</option>
+                            <option value="recente"><i class="fas fa-calendar-plus"></i> Mais Recente</option>
+                            <option value="favoritos"><i class="fas fa-star"></i> Favoritos</option>
+                        </select>
+                    </div>
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="grid" title="Visualização em Grade">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list" title="Visualização em Lista">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-body">
+                <div class="filters">
+                    <div class="filter-header">
+                        <h3><i class="fas fa-filter"></i> Filtros</h3>
+                        <button id="limparFiltros" class="btn-secondary btn-small">
+                            <i class="fas fa-times"></i> Limpar Filtros
+                        </button>
+                    </div>
+                    <div class="filter-tags" id="filtrosCategoria">
+                        <!-- Filtros de categoria -->
+                    </div>
+                    <div class="filter-rating">
+                        <label>Filtrar por Nota:</label>
+                        <div class="rating-filter">
+                            <button class="rating-filter-btn active" data-min="0" data-max="10">Todas</button>
+                            <button class="rating-filter-btn" data-min="8" data-max="10">⭐ 8+</button>
+                            <button class="rating-filter-btn" data-min="6" data-max="8">⭐ 6+</button>
+                            <button class="rating-filter-btn" data-min="0" data-max="6">⭐ 0-6</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="lista" class="movie-grid">
+                    <!-- Lista de filmes -->
+                </div>
+                
+                <div class="summary">
+                    <div class="summary-header">
+                        <h3><i class="fas fa-chart-pie"></i> Resumo da Coleção</h3>
+                        <div class="summary-stats">
+                            <span class="stat-badge">
+                                <i class="fas fa-film"></i>
+                                <span id="totalCategoriasResumo">0</span> categorias
+                            </span>
+                            <span class="stat-badge">
+                                <i class="fas fa-star"></i>
+                                <span id="mediaGeralResumo">0.0</span> média geral
+                            </span>
+                        </div>
+                    </div>
+                    <div class="summary-grid" id="resumoCategorias">
+                        <!-- Resumo por categoria -->
+                    </div>
+                </div>
+                
+                <div class="charts">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-bar"></i> Distribuição por Categoria</h3>
+                        <div class="chart" id="chartCategorias">
+                            <!-- Gráfico -->
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-line"></i> Distribuição por Nota</h3>
+                        <div class="chart" id="chartNotas">
+                            <!-- Gráfico -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Exportação -->
+    <div id="modalExportacao" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3><i class="fas fa-download"></i> Exportar Lista</h3>
+            <div class="export-options">
+                <div class="export-option" data-format="json">
+                    <i class="fas fa-file-code"></i>
+                    <div>
+                        <h4>JSON</h4>
+                        <p>Formato estruturado para backup e integração</p>
+                    </div>
+                </div>
+                <div class="export-option" data-format="csv">
+                    <i class="fas fa-file-csv"></i>
+                    <div>
+                        <h4>CSV</h4>
+                        <p>Compatible com Excel e Google Sheets</p>
+                    </div>
+                </div>
+                <div class="export-option" data-format="txt">
+                    <i class="fas fa-file-alt"></i>
+                    <div>
+                        <h4>Texto Simples</h4>
+                        <p>Lista formatada para impressão</p>
+                    </div>
+                </div>
+            </div>
+            <div class="export-advanced">
+                <label>
+                    <input type="checkbox" id="incluirDetalhes">
+                    Incluir detalhes completos
+                </label>
+                <label>
+                    <input type="checkbox" id="incluirPosters">
+                    Incluir links dos posters
+                </label>
+            </div>
+            <button id="confirmarExportacao" class="btn-save" style="width: 100%; margin-top: 20px;">
+                <i class="fas fa-download"></i> Exportar
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div id="modalConfirmacao" class="modal" style="display: none;">
+        <div class="modal-content confirm-modal">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirmação</h3>
+            <p id="confirmMessage">Tem certeza que deseja realizar esta ação?</p>
+            <div class="modal-actions">
+                <button id="confirmCancel" class="btn-secondary">Cancelar</button>
+                <button id="confirmOk" class="btn-danger">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+    
+    <script src="lista.js"></script>
+</body>
+</html>
